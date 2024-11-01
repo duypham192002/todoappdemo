@@ -5,14 +5,14 @@ import TodoListInput from "./TodoListInput";
 export type TodoData = {
   checked: boolean;
   content: string;
+  isEditing?: boolean;
 };
 
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
 
   const handleOnDelete = (index: number) => {
-    const updatedTodoData = todoData.filter((_, i) => i !== index);
-    setTodoData(updatedTodoData);
+    setTodoData((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleOnToggle = (index: number) => {
@@ -26,14 +26,23 @@ function TodoList() {
   const handleOnEdit = (index: number, newContent: string) => {
     setTodoData((prev) =>
       prev.map((item, i) =>
-        i === index ? { ...item, content: newContent } : item
+        i === index ? { ...item, content: newContent, isEditing: false } : item
       )
     );
   };
 
-  // const deleteAllTasks = () => {
-  //   setTodoData([]);
-  // };
+  // hàm xử lý status của edit
+  const handleToggleEdit = (index: number) => {
+    setTodoData((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, isEditing: !item.isEditing } : item
+      )
+    );
+  };
+
+  const deleteAllTasks = () => {
+    setTodoData([]);
+  };
 
   return (
     <>
@@ -43,7 +52,8 @@ function TodoList() {
         handleOnDelete={handleOnDelete}
         handleOnEdit={handleOnEdit}
         handleOnToggle={handleOnToggle}
-        // deleteAllTasks={deleteAllTasks}
+        deleteAllTasks={deleteAllTasks}
+        handleToggleEdit={handleToggleEdit}
       />
     </>
   );

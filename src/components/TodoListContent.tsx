@@ -6,28 +6,25 @@ function TodoListContent({
   handleOnDelete,
   handleOnEdit,
   handleOnToggle,
-}: // deleteAllTasks,
-{
+  deleteAllTasks,
+  handleToggleEdit,
+}: {
   todoData: TodoData[];
   handleOnDelete: (index: number) => void;
   handleOnEdit: (index: number, newContent: string) => void;
   handleOnToggle: (index: number) => void;
-  // deleteAllTasks: () => void;
+  deleteAllTasks: () => void;
+  handleToggleEdit: (index: number) => void;
 }) {
-  const [editValue, setEditValue] = useState<string>("");
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  // const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
+  const [editValues, setEditValues] = useState<{ [key: number]: string }>({}); // object chứa giá trị của input khi edit
 
-  const handleSaveEdit = (index: number) => {
-    if (editValue.trim()) {
-      handleOnEdit(index, editValue);
-      setEditingIndex(null);
-      setEditValue("");
-    }
+  const handleEditChange = (index: number, value: string) => {
+    setEditValues((prev) => ({ ...prev, [index]: value }));
+    handleOnEdit(index, value || todoData[index].content);
   };
 
   return (
-    <div className="max-w-full bg-white shadow-lg p-4">
+    <div className="max-w-full bg-white shadow-lg p-4 rounded-xl">
       <div className="flex justify-between pb-4">
         {todoData.length > 0 ? (
           <p>
@@ -36,7 +33,7 @@ function TodoListContent({
         ) : (
           <p>All tasks completed</p>
         )}
-        {/* <button onClick={deleteAllTasks}>Clear all tasks</button> */}
+        <button onClick={deleteAllTasks}>Clear all tasks</button>
       </div>
 
       <div>
@@ -54,20 +51,26 @@ function TodoListContent({
               onChange={() => handleOnToggle(index)}
             />
 
-            {editingIndex === index ? (
+            {data.isEditing ? (
               <div className="flex items-center flex-1">
                 <input
                   type="text"
-                  value={editValue}
-                  onChange={(e) => setEditValue(e.target.value)}
+                  value={editValues[index] || data.content}
+                  onChange={(e) =>
+                    setEditValues((prev) => ({
+                      ...prev,
+                      [index]: e.target.value,
+                    }))
+                  }
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") handleSaveEdit(index);
+                    if (e.key === "Enter")
+                      handleEditChange(index, editValues[index]);
                   }}
                   autoFocus
                   className="px-2 py-1 border border-gray-300 rounded flex-1 mr-2"
                 />
                 <button
-                  onClick={() => handleSaveEdit(index)}
+                  onClick={() => handleEditChange(index, editValues[index])}
                   className="px-2 py-1 bg-blue-500 text-white rounded"
                 >
                   Save
@@ -79,40 +82,30 @@ function TodoListContent({
             <div className="flex w-auto gap-4">
               <button
                 onClick={() => {
-                  if (index === index) {
-                    setEditValue(data.content);
-                    setEditingIndex(index);
-                  }
+                  handleToggleEdit(index);
+                  // handleSaveEdit(index);
                 }}
                 disabled={data.checked}
               >
-                {/* Icon cho chỉnh sửa */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                  />
-                </svg>
+                {data.isEditing ? null : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                    />
+                  </svg>
+                )}
               </button>
-              <button
-                onClick={() => {
-                  handleOnDelete(index);
-                  if (editingIndex === index) {
-                    setEditingIndex(null);
-                  } else if (editingIndex !== null && editingIndex > index) {
-                    setEditingIndex(editingIndex - 1);
-                  }
-                }}
-              >
-                {/* Icon cho xóa */}
+              <button onClick={() => handleOnDelete(index)}>
+                {/* Icon for delete */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
