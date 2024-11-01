@@ -6,13 +6,13 @@ function TodoListContent({
   handleOnDelete,
   handleOnEdit,
   handleOnToggle,
-  deleteAllTasks,
-}: {
+}: // deleteAllTasks,
+{
   todoData: TodoData[];
   handleOnDelete: (index: number) => void;
   handleOnEdit: (index: number, newContent: string) => void;
   handleOnToggle: (index: number) => void;
-  deleteAllTasks: () => void;
+  // deleteAllTasks: () => void;
 }) {
   const [editValue, setEditValue] = useState<string>("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -36,7 +36,7 @@ function TodoListContent({
         ) : (
           <p>All tasks completed</p>
         )}
-        <button onClick={deleteAllTasks}>Clear all tasks</button>
+        {/* <button onClick={deleteAllTasks}>Clear all tasks</button> */}
       </div>
 
       <div>

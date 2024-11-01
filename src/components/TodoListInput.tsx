@@ -9,11 +9,14 @@ function TodoListInput({
   const [inputText, setInputText] = useState("");
 
   const handleOnAdd = (content: string) => {
-    const newTask: TodoData = {
-      checked: false,
-      content: content,
-    };
-    setTododata((prev) => [...prev, newTask]);
+    if (content.trim()) {
+      const newTask: TodoData = {
+        checked: false,
+        content: content,
+      };
+      setTododata((prev) => [...prev, newTask]);
+      setInputText("");
+    }
   };
 
   return (
@@ -37,17 +40,16 @@ function TodoListInput({
         </div>
         <input
           type="text"
-          name="price"
-          id="price"
+          name="task"
+          id="task"
           className="block w-full rounded-md border-0 py-1.5 pl-10 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
           placeholder="Add a new task..."
           value={inputText}
-          onChange={(e) => {
-            setInputText(e.target.value);
-          }}
+          onChange={(e) => setInputText(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleOnAdd(inputText);
-            setInputText("");
+            if (e.key === "Enter") {
+              handleOnAdd(inputText);
+            }
           }}
         />
 
@@ -58,4 +60,5 @@ function TodoListInput({
     </div>
   );
 }
+
 export default TodoListInput;
