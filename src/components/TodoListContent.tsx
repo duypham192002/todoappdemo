@@ -6,11 +6,13 @@ function TodoListContent({
   handleOnDelete,
   handleOnEdit,
   handleOnToggle,
+  deleteAllTasks,
 }: {
   todoData: TodoData[];
   handleOnDelete: (index: number) => void;
   handleOnEdit: (index: number, newContent: string) => void;
   handleOnToggle: (index: number) => void;
+  deleteAllTasks: () => void;
 }) {
   const [editValue, setEditValue] = useState<string>("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -34,7 +36,9 @@ function TodoListContent({
         ) : (
           <p>All tasks completed</p>
         )}
+        <button onClick={deleteAllTasks}>Clear all tasks</button>
       </div>
+
       <div>
         {todoData.map((data, index) => (
           <div
@@ -76,7 +80,6 @@ function TodoListContent({
               <button
                 onClick={() => {
                   if (index === index) {
-                    console.log("edit", index);
                     setEditValue(data.content);
                     setEditingIndex(index);
                   }
@@ -102,10 +105,10 @@ function TodoListContent({
               <button
                 onClick={() => {
                   handleOnDelete(index);
-                  if (index === index) {
-                    if (editingIndex !== null) {
-                      setEditingIndex(editingIndex - 1);
-                    }
+                  if (editingIndex === index) {
+                    setEditingIndex(null);
+                  } else if (editingIndex !== null && editingIndex > index) {
+                    setEditingIndex(editingIndex - 1);
                   }
                 }}
               >

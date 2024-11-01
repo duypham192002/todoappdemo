@@ -31,6 +31,10 @@ function TodoList() {
     );
   };
 
+  const deleteAllTasks = () => {
+    setTodoData([]);
+  };
+
   return (
     <>
       <TodoListInput setTododata={setTodoData} />
@@ -39,6 +43,7 @@ function TodoList() {
         handleOnDelete={handleOnDelete}
         handleOnEdit={handleOnEdit}
         handleOnToggle={handleOnToggle}
+        deleteAllTasks={deleteAllTasks}
       />
     </>
   );
