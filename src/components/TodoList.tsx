@@ -10,18 +10,22 @@ export type TodoData = {
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
 
-  // Hàm cập nhật dữ liệu Todo
-  const updateTodoData = (newTodoData: TodoData[]) => {
-    setTodoData(newTodoData);
+  const handleOnDelete = (index: number) => {
+    const updatedTodoData = todoData.filter((_, i) => i !== index);
+    setTodoData(updatedTodoData);
   };
 
-  const handleOnDelete = (index: number) => {
-    updateTodoData(todoData.filter((_, i) => i !== index));
+  const handleOnToggle = (index: number) => {
+    setTodoData((prev) =>
+      prev.map((item, i) =>
+        i === index ? { ...item, checked: !item.checked } : item
+      )
+    );
   };
 
   const handleOnEdit = (index: number, newContent: string) => {
-    updateTodoData(
-      todoData.map((item, i) =>
+    setTodoData((prev) =>
+      prev.map((item, i) =>
         i === index ? { ...item, content: newContent } : item
       )
     );
@@ -34,6 +38,7 @@ function TodoList() {
         todoData={todoData}
         handleOnDelete={handleOnDelete}
         handleOnEdit={handleOnEdit}
+        handleOnToggle={handleOnToggle}
       />
     </>
   );

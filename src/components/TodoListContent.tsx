@@ -1,31 +1,20 @@
 import { TodoData } from "./TodoList";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function TodoListContent({
   todoData,
   handleOnDelete,
   handleOnEdit,
+  handleOnToggle,
 }: {
   todoData: TodoData[];
   handleOnDelete: (index: number) => void;
   handleOnEdit: (index: number, newContent: string) => void;
+  handleOnToggle: (index: number) => void;
 }) {
   const [editValue, setEditValue] = useState<string>("");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
-
-  // Đồng bộ `checkedItems` với `todoData` mỗi khi `todoData` thay đổi
-  useEffect(() => {
-    setCheckedItems(new Array(todoData.length).fill(false));
-  }, [todoData]);
-
-  const handleCheckboxChange = (index: number) => {
-    setCheckedItems((prev) => {
-      const newCheckedItems = [...prev];
-      newCheckedItems[index] = !newCheckedItems[index];
-      return newCheckedItems;
-    });
-  };
+  // const [checkedItems, setCheckedItems] = useState<boolean[]>([]);
 
   const handleSaveEdit = (index: number) => {
     if (editValue.trim()) {
@@ -33,21 +22,6 @@ function TodoListContent({
       setEditingIndex(null);
       setEditValue("");
     }
-  };
-
-  const handleDelete = (index: number) => {
-    handleOnDelete(index);
-    setCheckedItems((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const clearCompletedTasks = () => {
-    const completedTaskIndices = todoData
-      .map((_, index) => index)
-      .filter((index) => checkedItems[index]);
-    completedTaskIndices.forEach((index) => handleOnDelete(index));
-    setCheckedItems(
-      new Array(todoData.length - completedTaskIndices.length).fill(false)
-    );
   };
 
   return (
@@ -60,46 +34,56 @@ function TodoListContent({
         ) : (
           <p>All tasks completed</p>
         )}
-        <button onClick={clearCompletedTasks}>Clear all tasks</button>
       </div>
       <div>
         {todoData.map((data, index) => (
           <div
             key={index}
             className={`flex items-center p-4 ${
-              checkedItems[index] ? "opacity-50 line-through" : ""
+              data.checked ? "opacity-50 line-through" : ""
             }`}
           >
             <input
               type="checkbox"
               className="checked:bg-blue-500 size-4"
-              checked={checkedItems[index] || false}
-              onChange={() => handleCheckboxChange(index)}
+              checked={data.checked}
+              onChange={() => handleOnToggle(index)}
             />
+
             {editingIndex === index ? (
-              <input
-                type="text"
-                value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSaveEdit(index);
-                }}
-                autoFocus
-                className="px-2 py-1 border border-gray-300 rounded flex-1"
-              />
+              <div className="flex items-center flex-1">
+                <input
+                  type="text"
+                  value={editValue}
+                  onChange={(e) => setEditValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveEdit(index);
+                  }}
+                  autoFocus
+                  className="px-2 py-1 border border-gray-300 rounded flex-1 mr-2"
+                />
+                <button
+                  onClick={() => handleSaveEdit(index)}
+                  className="px-2 py-1 bg-blue-500 text-white rounded"
+                >
+                  Save
+                </button>
+              </div>
             ) : (
               <p className="px-4 font-bold flex-1">{data.content}</p>
             )}
             <div className="flex w-auto gap-4">
               <button
                 onClick={() => {
-                  if (!checkedItems[index]) {
+                  if (index === index) {
+                    console.log("edit", index);
                     setEditValue(data.content);
                     setEditingIndex(index);
                   }
                 }}
-                disabled={checkedItems[index]}
+                disabled={data.checked}
               >
+                {/* Icon cho chỉnh sửa */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -115,7 +99,17 @@ function TodoListContent({
                   />
                 </svg>
               </button>
-              <button onClick={() => handleDelete(index)}>
+              <button
+                onClick={() => {
+                  handleOnDelete(index);
+                  if (index === index) {
+                    if (editingIndex !== null) {
+                      setEditingIndex(editingIndex - 1);
+                    }
+                  }
+                }}
+              >
+                {/* Icon cho xóa */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

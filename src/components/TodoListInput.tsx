@@ -8,12 +8,12 @@ function TodoListInput({
 }) {
   const [inputText, setInputText] = useState("");
 
-  const handleOnAdd = () => {
-    if (inputText === "") return;
-    setTododata((previousState) => {
-      return [...previousState, { checked: false, content: inputText }];
-    });
-    setInputText("");
+  const handleOnAdd = (content: string) => {
+    const newTask: TodoData = {
+      checked: false,
+      content: content,
+    };
+    setTododata((prev) => [...prev, newTask]);
   };
 
   return (
@@ -46,12 +46,13 @@ function TodoListInput({
             setInputText(e.target.value);
           }}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleOnAdd();
+            if (e.key === "Enter") handleOnAdd(inputText);
+            setInputText("");
           }}
         />
 
         <div className="absolute inset-y-0 right-0 flex items-center pr-8">
-          <button onClick={handleOnAdd}>ADD</button>
+          <button onClick={() => handleOnAdd(inputText)}>ADD</button>
         </div>
       </div>
     </div>
