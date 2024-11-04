@@ -23,6 +23,15 @@ function TodoListContent({
     handleOnEdit(index, value || todoData[index].content);
   };
 
+  const handleDelete = (index: number) => {
+    setEditValues((prev) => {
+      const updatedEditValues = { ...prev };
+      delete updatedEditValues[index]; // xóa giá trị edit value của item có index tương ứng sau khi edit xong
+      return updatedEditValues;
+    });
+
+    handleOnDelete(index);
+  };
   return (
     <div className="max-w-full bg-white shadow-lg p-4 rounded-xl">
       <div className="flex justify-between pb-4">
@@ -56,21 +65,25 @@ function TodoListContent({
                 <input
                   type="text"
                   value={editValues[index] || data.content}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setEditValues((prev) => ({
                       ...prev,
                       [index]: e.target.value,
-                    }))
-                  }
+                    }));
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter")
                       handleEditChange(index, editValues[index]);
+                    // setEditValues("");
                   }}
                   autoFocus
                   className="px-2 py-1 border border-gray-300 rounded flex-1 mr-2"
                 />
                 <button
-                  onClick={() => handleEditChange(index, editValues[index])}
+                  onClick={() => {
+                    handleEditChange(index, editValues[index]);
+                    // console.log(editValues[index]);
+                  }}
                   className="px-2 py-1 bg-blue-500 text-white rounded"
                 >
                   Save
@@ -104,7 +117,7 @@ function TodoListContent({
                   </svg>
                 )}
               </button>
-              <button onClick={() => handleOnDelete(index)}>
+              <button onClick={() => handleDelete(index)}>
                 {/* Icon for delete */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
