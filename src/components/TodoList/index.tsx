@@ -10,23 +10,20 @@ export type TodoData = {
 
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
-
+  const [editValues, setEditValues] = useState<{ [key: number]: string }>({});
   const handleOnDelete = (index: number) => {
     setTodoData((prev) => prev.filter((_, i) => i !== index));
+    setEditValues((prev) => {
+      const newEditValues = { ...prev };
+      delete newEditValues[index];
+      return newEditValues;
+    });
   };
 
   const handleOnToggle = (index: number) => {
     setTodoData((prev) =>
       prev.map((item, i) =>
         i === index ? { ...item, checked: !item.checked } : item
-      )
-    );
-  };
-
-  const handleOnEdit = (index: number, newContent: string) => {
-    setTodoData((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, content: newContent, isEditing: false } : item
       )
     );
   };
@@ -39,9 +36,12 @@ function TodoList() {
         content: newContent,
         isEditing: false,
       };
-      console.log(newState);
-
       return newState;
+    });
+    setEditValues((prev) => {
+      const newEditValues = { ...prev };
+      delete newEditValues[index];
+      return newEditValues;
     });
   };
 
@@ -55,6 +55,7 @@ function TodoList() {
 
   const OnDeleteAllTasks = () => {
     setTodoData([]);
+    setEditValues({});
   };
 
   const handleOnAdd = (content: string) => {
@@ -73,11 +74,12 @@ function TodoList() {
       <TodoListContent
         todoData={todoData}
         handleOnDelete={handleOnDelete}
-        handleOnEdit={handleOnEdit}
         handleOnSave={handleOnSave}
         handleOnToggle={handleOnToggle}
         deleteAllTasks={OnDeleteAllTasks}
         handleToggleEdit={handleToggleEdit}
+        editValues={editValues}
+        setEditValues={setEditValues}
       />
     </>
   );
