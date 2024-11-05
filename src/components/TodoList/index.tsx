@@ -73,7 +73,6 @@ function TodoList() {
       <TodoListContent
         todoData={todoData}
         handleOnDelete={handleOnDelete}
-        // handleOnAdd={handleOnAdd}
         handleOnEdit={handleOnEdit}
         handleOnSave={handleOnSave}
         handleOnToggle={handleOnToggle}
