@@ -1,5 +1,5 @@
 // import React from "react";
-import { TodoData } from "./TodoList";
+import { TodoData } from "../..";
 
 interface TodoItemProps {
   data: TodoData;

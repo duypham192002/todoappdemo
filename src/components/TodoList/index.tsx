@@ -31,7 +31,20 @@ function TodoList() {
     );
   };
 
-  // hàm xử lý status của edit
+  const handleOnSave = (index: number, newContent: string) => {
+    setTodoData((prev) => {
+      const newState = [...prev];
+      newState[index] = {
+        ...newState[index],
+        content: newContent,
+        isEditing: false,
+      };
+      console.log(newState);
+
+      return newState;
+    });
+  };
+
   const handleToggleEdit = (index: number) => {
     setTodoData((prev) =>
       prev.map((item, i) =>
@@ -40,19 +53,31 @@ function TodoList() {
     );
   };
 
-  const deleteAllTasks = () => {
+  const OnDeleteAllTasks = () => {
     setTodoData([]);
+  };
+
+  const handleOnAdd = (content: string) => {
+    if (content.trim()) {
+      const newTask: TodoData = {
+        checked: false,
+        content: content,
+      };
+      setTodoData((prev) => [...prev, newTask]);
+    }
   };
 
   return (
     <>
-      <TodoListInput setTododata={setTodoData} />
+      <TodoListInput handleOnAdd={handleOnAdd} />
       <TodoListContent
         todoData={todoData}
         handleOnDelete={handleOnDelete}
+        // handleOnAdd={handleOnAdd}
         handleOnEdit={handleOnEdit}
+        handleOnSave={handleOnSave}
         handleOnToggle={handleOnToggle}
-        deleteAllTasks={deleteAllTasks}
+        deleteAllTasks={OnDeleteAllTasks}
         handleToggleEdit={handleToggleEdit}
       />
     </>

@@ -1,13 +1,14 @@
-import { TodoData } from "./TodoList";
+import { TodoData } from "..";
 import { useState } from "react";
 
 function TodoListContent({
   todoData,
   handleOnDelete,
-  handleOnEdit,
+  // handleOnEdit,
   handleOnToggle,
   deleteAllTasks,
   handleToggleEdit,
+  handleOnSave,
 }: {
   todoData: TodoData[];
   handleOnDelete: (index: number) => void;
@@ -15,13 +16,9 @@ function TodoListContent({
   handleOnToggle: (index: number) => void;
   deleteAllTasks: () => void;
   handleToggleEdit: (index: number) => void;
+  handleOnSave: (index: number, newContent: string) => void;
 }) {
   const [editValues, setEditValues] = useState<{ [key: number]: string }>({}); // object chứa giá trị của input khi edit
-
-  const handleEditChange = (index: number, value: string) => {
-    setEditValues((prev) => ({ ...prev, [index]: value }));
-    handleOnEdit(index, value || todoData[index].content);
-  };
 
   const handleDelete = (index: number) => {
     setEditValues((prev) => {
@@ -72,17 +69,16 @@ function TodoListContent({
                     }));
                   }}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter")
-                      handleEditChange(index, editValues[index]);
-                    // setEditValues("");
+                    if (e.key === "Enter") {
+                      handleOnSave(index, editValues[index] || data.content);
+                    }
                   }}
                   autoFocus
                   className="px-2 py-1 border border-gray-300 rounded flex-1 mr-2"
                 />
                 <button
                   onClick={() => {
-                    handleEditChange(index, editValues[index]);
-                    // console.log(editValues[index]);
+                    handleOnSave(index, editValues[index] || data.content);
                   }}
                   className="px-2 py-1 bg-blue-500 text-white rounded"
                 >

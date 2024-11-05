@@ -1,23 +1,11 @@
 import { useState } from "react";
-import { TodoData } from "./TodoList";
 
 function TodoListInput({
-  setTododata,
+  handleOnAdd,
 }: {
-  setTododata: React.Dispatch<React.SetStateAction<TodoData[]>>;
+  handleOnAdd: (content: string) => void;
 }) {
   const [inputText, setInputText] = useState("");
-
-  const handleOnAdd = (content: string) => {
-    if (content.trim()) {
-      const newTask: TodoData = {
-        checked: false,
-        content: content,
-      };
-      setTododata((prev) => [...prev, newTask]);
-      setInputText("");
-    }
-  };
 
   return (
     <div>
@@ -48,13 +36,23 @@ function TodoListInput({
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              handleOnAdd(inputText);
+              handleOnAdd(inputText.trim());
+              setInputText("");
             }
           }}
         />
 
         <div className="absolute inset-y-0 right-0 flex items-center pr-8">
-          <button onClick={() => handleOnAdd(inputText)}>ADD</button>
+          <button
+            onClick={() => {
+              if (inputText) {
+                handleOnAdd(inputText.trim());
+                setInputText("");
+              }
+            }}
+          >
+            ADD
+          </button>
         </div>
       </div>
     </div>

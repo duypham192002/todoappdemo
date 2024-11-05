@@ -1,9 +1,9 @@
 type TodoHeaderProps = {
   todoCount: number;
-  deleteAllTasks: () => void;
+  OnDeletteAllTasks: () => void;
 };
 
-function TodoHeader({ todoCount, deleteAllTasks }: TodoHeaderProps) {
+function TodoHeader({ todoCount, OnDeletteAllTasks }: TodoHeaderProps) {
   return (
     <div className="flex justify-between pb-4">
       {todoCount > 0 ? (
@@ -18,7 +18,7 @@ function TodoHeader({ todoCount, deleteAllTasks }: TodoHeaderProps) {
         <option value="complete">Complete</option>
         <option value="incomplete">Incomplete</option>
       </select>
-      <button onClick={deleteAllTasks}>Clear all tasks</button>
+      <button onClick={OnDeletteAllTasks}>Clear all tasks</button>
     </div>
   );
 }
