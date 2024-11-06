@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TodoListContent from "./TodoListContent";
 import TodoListInput from "./TodoListInput";
 
@@ -43,11 +43,14 @@ function TodoList() {
         ...newState[index],
         editingValue: newValue,
       };
-      console.log(newState);
 
       return newState;
     });
   };
+
+  useEffect(() => {
+    console.log("Rerender");
+  });
 
   const handleToggleEdit = (index: number) => {
     setTodoData((prev) =>
