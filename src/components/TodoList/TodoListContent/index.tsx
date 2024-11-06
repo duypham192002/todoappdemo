@@ -1,5 +1,4 @@
 import { TodoData } from "..";
-// import { useState } from "react";
 
 function TodoListContent({
   todoData,
@@ -7,20 +6,16 @@ function TodoListContent({
   handleOnToggle,
   deleteAllTasks,
   handleToggleEdit,
-  handleOnSave,
-  editValues,
-  setEditValues,
+  handleSave,
+  handleEditingChange,
 }: {
   todoData: TodoData[];
   handleOnDelete: (index: number) => void;
   handleOnToggle: (index: number) => void;
   deleteAllTasks: () => void;
   handleToggleEdit: (index: number) => void;
-  handleOnSave: (index: number, newContent: string) => void;
-  editValues: { [key: number]: string };
-  setEditValues: React.Dispatch<
-    React.SetStateAction<{ [key: number]: string }>
-  >;
+  handleSave: (index: number) => void;
+  handleEditingChange: (index: number, newContent: string) => void;
 }) {
   const handleDelete = (index: number) => {
     handleOnDelete(index);
@@ -58,25 +53,20 @@ function TodoListContent({
               <div className="flex items-center flex-1">
                 <input
                   type="text"
-                  value={editValues[index] || data.content}
+                  value={data.editingValue}
                   onChange={(e) => {
-                    setEditValues((prev) => ({
-                      ...prev,
-                      [index]: e.target.value,
-                    }));
+                    handleEditingChange(index, e.target.value);
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      handleOnSave(index, editValues[index] || data.content);
+                      handleSave(index);
                     }
                   }}
                   autoFocus
                   className="px-2 py-1 border border-gray-300 rounded flex-1 mr-2"
                 />
                 <button
-                  onClick={() => {
-                    handleOnSave(index, editValues[index] || data.content);
-                  }}
+                  onClick={() => handleSave(index)}
                   className="px-2 py-1 bg-blue-500 text-white rounded"
                 >
                   Save
@@ -87,9 +77,7 @@ function TodoListContent({
             )}
             <div className="flex w-auto gap-4">
               <button
-                onClick={() => {
-                  handleToggleEdit(index);
-                }}
+                onClick={() => handleToggleEdit(index)}
                 disabled={data.checked}
               >
                 {data.isEditing ? null : (

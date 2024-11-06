@@ -6,18 +6,14 @@ export type TodoData = {
   checked: boolean;
   content: string;
   isEditing?: boolean;
+  editingValue: string;
 };
 
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
-  const [editValues, setEditValues] = useState<{ [key: number]: string }>({});
+
   const handleOnDelete = (index: number) => {
     setTodoData((prev) => prev.filter((_, i) => i !== index));
-    setEditValues((prev) => {
-      const newEditValues = { ...prev };
-      delete newEditValues[index];
-      return newEditValues;
-    });
   };
 
   const handleOnToggle = (index: number) => {
@@ -28,34 +24,43 @@ function TodoList() {
     );
   };
 
-  const handleOnSave = (index: number, newContent: string) => {
+  const handleSave = (index: number) => {
     setTodoData((prev) => {
       const newState = [...prev];
       newState[index] = {
         ...newState[index],
-        content: newContent,
+        content: newState[index].editingValue,
         isEditing: false,
       };
       return newState;
     });
-    setEditValues((prev) => {
-      const newEditValues = { ...prev };
-      delete newEditValues[index];
-      return newEditValues;
+  };
+
+  const handleEditingChange = (index: number, newValue: string) => {
+    setTodoData((prev) => {
+      const newState = [...prev];
+      newState[index] = {
+        ...newState[index],
+        editingValue: newValue,
+      };
+      console.log(newState);
+
+      return newState;
     });
   };
 
   const handleToggleEdit = (index: number) => {
     setTodoData((prev) =>
       prev.map((item, i) =>
-        i === index ? { ...item, isEditing: !item.isEditing } : item
+        i === index
+          ? { ...item, isEditing: !item.isEditing, editingValue: item.content }
+          : item
       )
     );
   };
 
   const OnDeleteAllTasks = () => {
     setTodoData([]);
-    setEditValues({});
   };
 
   const handleOnAdd = (content: string) => {
@@ -63,6 +68,7 @@ function TodoList() {
       const newTask: TodoData = {
         checked: false,
         content: content,
+        editingValue: "",
       };
       setTodoData((prev) => [...prev, newTask]);
     }
@@ -74,12 +80,11 @@ function TodoList() {
       <TodoListContent
         todoData={todoData}
         handleOnDelete={handleOnDelete}
-        handleOnSave={handleOnSave}
+        handleEditingChange={handleEditingChange}
+        handleSave={handleSave}
         handleOnToggle={handleOnToggle}
         deleteAllTasks={OnDeleteAllTasks}
         handleToggleEdit={handleToggleEdit}
-        editValues={editValues}
-        setEditValues={setEditValues}
       />
     </>
   );
