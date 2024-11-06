@@ -5,11 +5,10 @@ import { TodoData } from "../..";
 interface TodoItemProps {
   data: TodoData;
   index: number;
-  onSaveEdit: (index: number, value: string) => void;
+  onSaveEdit: (index: number, newValue: string) => void;
   onToggle: (index: number) => void;
   onDelete: (index: number) => void;
   onToggleEdit: (index: number) => void;
-  onChangeEdit: (index: number, newContent: string) => void;
 }
 
 function TodoItem({
@@ -18,9 +17,9 @@ function TodoItem({
   onSaveEdit,
   onToggle,
   onDelete,
-  onChangeEdit,
 }: TodoItemProps) {
-  const [editingValue, setEditingValue] = useState<string>(data.content);
+  const [editingValue, setEditingValue] = useState<string>("");
+  console.log(editingValue);
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -41,14 +40,14 @@ function TodoItem({
       {isEditing ? (
         <input
           type="text"
-          value={editingValue}
+          value={editingValue || data.content}
           onChange={(e) => {
-            onChangeEdit(index, e.target.value);
             setEditingValue(e.target.value);
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               onSaveEdit(index, editingValue);
+              setIsEditing(false);
             }
           }}
           autoFocus
@@ -62,6 +61,7 @@ function TodoItem({
         <button
           onClick={() => {
             setIsEditing(true);
+            setEditingValue(data.content);
           }}
           disabled={data.checked}
           className="flex items-center"

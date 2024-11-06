@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TodoListContent from "./TodoListContent";
 import TodoListInput from "./TodoListInput";
 
@@ -24,14 +24,17 @@ function TodoList() {
     );
   };
 
-  const handleSave = (index: number) => {
+  const handleSave = (index: number, newValue: string) => {
     setTodoData((prev) => {
       const newState = [...prev];
       newState[index] = {
         ...newState[index],
-        content: newState[index].editingValue,
+        content: newValue,
         isEditing: false,
       };
+
+      console.log(newState);
+
       return newState;
     });
   };
@@ -47,10 +50,6 @@ function TodoList() {
       return newState;
     });
   };
-
-  useEffect(() => {
-    console.log("Rerender");
-  });
 
   const handleToggleEdit = (index: number) => {
     setTodoData((prev) =>

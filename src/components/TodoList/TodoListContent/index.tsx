@@ -8,14 +8,13 @@ function TodoListContent({
   deleteAllTasks,
   handleToggleEdit,
   handleSave,
-  handleEditingChange,
 }: {
   todoData: TodoData[];
   handleOnDelete: (index: number) => void;
   handleOnToggle: (index: number) => void;
   deleteAllTasks: () => void;
   handleToggleEdit: (index: number) => void;
-  handleSave: (index: number) => void;
+  handleSave: (index: number, newValue: string) => void;
   handleEditingChange: (index: number, newContent: string) => void;
 }) {
   const handleDelete = (index: number) => {
@@ -41,7 +40,6 @@ function TodoListContent({
             key={index}
             data={data}
             index={index}
-            onChangeEdit={handleEditingChange}
             onSaveEdit={handleSave}
             onDelete={handleDelete}
             onToggle={handleOnToggle}
