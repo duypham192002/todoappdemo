@@ -19,7 +19,6 @@ function TodoListContent({
   deleteAllTasks: () => void;
   handleToggleEdit: (index: number) => void;
   handleSave: (index: number, newValue: string) => void;
-  handleEditingChange: (index: number, newContent: string) => void;
   handleOnFilter: (newFilter: "all" | "complete" | "incomplete") => void;
 }) {
   const handleDelete = (index: number) => {
