@@ -7,10 +7,12 @@ export type TodoData = {
   content: string;
   isEditing?: boolean;
   editingValue: string;
+  status: "all" | "complete" | "incomplete";
 };
 
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
+  const [filter, setFilter] = useState<TodoData["status"]>("all");
 
   const handleOnDelete = (index: number) => {
     setTodoData((prev) => prev.filter((_, i) => i !== index));
@@ -32,21 +34,6 @@ function TodoList() {
         content: newValue,
         isEditing: false,
       };
-
-      console.log(newState);
-
-      return newState;
-    });
-  };
-
-  const handleEditingChange = (index: number, newValue: string) => {
-    setTodoData((prev) => {
-      const newState = [...prev];
-      newState[index] = {
-        ...newState[index],
-        editingValue: newValue,
-      };
-
       return newState;
     });
   };
@@ -71,22 +58,35 @@ function TodoList() {
         checked: false,
         content: content,
         editingValue: "",
+        status: "incomplete",
       };
       setTodoData((prev) => [...prev, newTask]);
     }
   };
 
+  const handleOnFilter = (newFilter: "all" | "complete" | "incomplete") => {
+    setFilter(newFilter);
+  };
+
+  const filteredTodoData = todoData.filter((item) => {
+    if (filter === "all") return true;
+    if (filter === "complete") return item.checked;
+    if (filter === "incomplete") return !item.checked;
+    return true;
+  });
+
   return (
     <>
       <TodoListInput handleOnAdd={handleOnAdd} />
       <TodoListContent
-        todoData={todoData}
+        todoCount={filteredTodoData.length}
+        todoData={filteredTodoData}
         handleOnDelete={handleOnDelete}
-        handleEditingChange={handleEditingChange}
-        handleSave={handleSave}
         handleOnToggle={handleOnToggle}
         deleteAllTasks={OnDeleteAllTasks}
         handleToggleEdit={handleToggleEdit}
+        handleSave={handleSave}
+        handleOnFilter={handleOnFilter}
       />
     </>
   );

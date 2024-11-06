@@ -1,14 +1,18 @@
 import { TodoData } from "..";
+import TodoHeader from "../TodoListHeader";
 import TodoItem from "./TodoListItem";
 
 function TodoListContent({
+  todoCount,
   todoData,
   handleOnDelete,
   handleOnToggle,
   deleteAllTasks,
   handleToggleEdit,
   handleSave,
+  handleOnFilter,
 }: {
+  todoCount: number;
   todoData: TodoData[];
   handleOnDelete: (index: number) => void;
   handleOnToggle: (index: number) => void;
@@ -16,6 +20,7 @@ function TodoListContent({
   handleToggleEdit: (index: number) => void;
   handleSave: (index: number, newValue: string) => void;
   handleEditingChange: (index: number, newContent: string) => void;
+  handleOnFilter: (newFilter: "all" | "complete" | "incomplete") => void;
 }) {
   const handleDelete = (index: number) => {
     handleOnDelete(index);
@@ -23,16 +28,11 @@ function TodoListContent({
 
   return (
     <div className="max-w-full bg-white shadow-lg p-4 rounded-xl">
-      <div className="flex justify-between pb-4">
-        {todoData.length > 0 ? (
-          <p>
-            {todoData.length} task{todoData.length > 1 ? "s" : ""} left
-          </p>
-        ) : (
-          <p>All tasks completed</p>
-        )}
-        <button onClick={deleteAllTasks}>Clear all tasks</button>
-      </div>
+      <TodoHeader
+        todoCount={todoCount}
+        onDeleteAllTasks={deleteAllTasks}
+        onFilterChange={handleOnFilter}
+      />
 
       <div>
         {todoData.map((data, index) => (
