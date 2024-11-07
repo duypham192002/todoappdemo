@@ -1,29 +1,58 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TodoListContent from "./TodoListContent";
 import TodoListInput from "./TodoListInput";
+
+enum Status {
+  All = "all",
+  Complete = "complete",
+  Incomplete = "incomplete",
+}
 
 export type TodoData = {
   checked: boolean;
   content: string;
   isEditing?: boolean;
   editingValue: string;
-  status: "all" | "complete" | "incomplete";
+  status: Status;
 };
 
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
-  const [filter, setFilter] = useState<TodoData["status"]>("all");
+  const [filter, setFilter] = useState<TodoData["status"]>(Status.All);
+  const [filteredTodoData, setFilteredTodoData] = useState<TodoData[]>([]);
+
+  useEffect(() => {
+    const filtered = todoData.filter((item) => {
+      switch (filter) {
+        case Status.Complete:
+          return item.status === Status.Complete;
+        case Status.Incomplete:
+          return item.status === Status.Incomplete;
+        default:
+          return true;
+      }
+    });
+    setFilteredTodoData(filtered);
+  }, [filter, todoData]);
 
   const handleOnDelete = (index: number) => {
-    setTodoData((prev) => prev.filter((_, i) => i !== index));
+    const targetItem = filteredTodoData[index];
+    setTodoData((prev) => prev.filter((item) => item !== targetItem));
   };
 
   const handleOnToggle = (index: number) => {
-    setTodoData((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, checked: !item.checked } : item
-      )
-    );
+    const updatedData = todoData.map((item) => {
+      if (item === filteredTodoData[index]) {
+        const isNowChecked = !item.checked;
+        return {
+          ...item,
+          checked: isNowChecked,
+          status: isNowChecked ? Status.Complete : Status.Incomplete,
+        };
+      }
+      return item;
+    });
+    setTodoData(updatedData);
   };
 
   const handleSave = (index: number, newValue: string) => {
@@ -40,8 +69,8 @@ function TodoList() {
 
   const handleToggleEdit = (index: number) => {
     setTodoData((prev) =>
-      prev.map((item, i) =>
-        i === index
+      prev.map((item) =>
+        item === filteredTodoData[index]
           ? { ...item, isEditing: !item.isEditing, editingValue: item.content }
           : item
       )
@@ -56,24 +85,17 @@ function TodoList() {
     if (content.trim()) {
       const newTask: TodoData = {
         checked: false,
-        content: content,
+        content,
         editingValue: "",
-        status: "incomplete",
+        status: Status.Incomplete, // Use Status enum here
       };
       setTodoData((prev) => [...prev, newTask]);
     }
   };
 
-  const handleOnFilter = (newFilter: "all" | "complete" | "incomplete") => {
+  const handleOnFilter = (newFilter: TodoData["status"]) => {
     setFilter(newFilter);
   };
-
-  const filteredTodoData = todoData.filter((item) => {
-    if (filter === "all") return true;
-    if (filter === "complete") return item.checked;
-    if (filter === "incomplete") return !item.checked;
-    return true;
-  });
 
   return (
     <>

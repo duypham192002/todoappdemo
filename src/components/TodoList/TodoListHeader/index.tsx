@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { TodoData } from "..";
 
+enum Status {
+  All = "all",
+  Complete = "complete",
+  Incomplete = "incomplete",
+}
+
 type TodoHeaderProps = {
   todoCount: number;
   onDeleteAllTasks: () => void;
@@ -12,13 +18,19 @@ function TodoHeader({
   onDeleteAllTasks,
   onFilterChange,
 }: TodoHeaderProps) {
-  const [filter, setFilter] = useState<TodoData["status"]>("all");
+  const [filter, setFilter] = useState<TodoData["status"]>(Status.All);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newFilter = e.target.value as TodoData["status"];
     setFilter(newFilter);
     onFilterChange(newFilter);
   };
+
+  const filteredData: { label: string; value: TodoData["status"] }[] = [
+    { label: "All", value: Status.All },
+    { label: "Complete", value: Status.Complete },
+    { label: "Incomplete", value: Status.Incomplete },
+  ];
 
   return (
     <div className="flex justify-between pb-4">
@@ -38,9 +50,11 @@ function TodoHeader({
           value={filter}
           onChange={handleFilterChange}
         >
-          <option value="all">All</option>
-          <option value="complete">Complete</option>
-          <option value="incomplete">Incomplete</option>
+          {filteredData.map((option) => (
+            <option key={option.label} value={option.value}>
+              {option.label}
+            </option>
+          ))}
         </select>
       </form>
 
