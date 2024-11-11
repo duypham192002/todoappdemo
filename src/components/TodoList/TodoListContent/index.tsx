@@ -1,10 +1,11 @@
-import { TodoData } from "..";
+import { Status, TodoData } from "..";
 import TodoHeader from "../TodoListHeader";
 import TodoItem from "./TodoListItem";
 
 function TodoListContent({
   todoCount,
   todoData,
+  filter,
   handleOnDelete,
   handleOnToggle,
   deleteAllTasks,
@@ -14,6 +15,7 @@ function TodoListContent({
 }: {
   todoCount: number;
   todoData: TodoData[];
+  filter: Status;
   handleOnDelete: (index: number) => void;
   handleOnToggle: (index: number) => void;
   deleteAllTasks: () => void;
@@ -29,6 +31,7 @@ function TodoListContent({
     <div className="max-w-full bg-white shadow-lg p-4 rounded-xl">
       <TodoHeader
         todoCount={todoCount}
+        filter={filter}
         onDeleteAllTasks={deleteAllTasks}
         onFilterChange={handleOnFilter}
       />

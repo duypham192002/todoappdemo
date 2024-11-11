@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { TodoData } from "..";
+import { Status, TodoData } from "..";
 
-enum Status {
-  All = "all",
-  Complete = "complete",
-  Incomplete = "incomplete",
-}
+// Define the filteredData array outside of the component
+const filteredData: { label: string; value: TodoData["status"] }[] = [
+  { label: "All", value: "all" },
+  { label: "Complete", value: "complete" },
+  { label: "Incomplete", value: "incomplete" },
+];
 
 type TodoHeaderProps = {
   todoCount: number;
+  filter: Status;
   onDeleteAllTasks: () => void;
   onFilterChange: (filter: TodoData["status"]) => void;
 };
@@ -18,19 +20,13 @@ function TodoHeader({
   onDeleteAllTasks,
   onFilterChange,
 }: TodoHeaderProps) {
-  const [filter, setFilter] = useState<TodoData["status"]>(Status.All);
+  const [filter, setFilter] = useState<TodoData["status"]>("all");
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newFilter = e.target.value as TodoData["status"];
     setFilter(newFilter);
     onFilterChange(newFilter);
   };
-
-  const filteredData: { label: string; value: TodoData["status"] }[] = [
-    { label: "All", value: Status.All },
-    { label: "Complete", value: Status.Complete },
-    { label: "Incomplete", value: Status.Incomplete },
-  ];
 
   return (
     <div className="flex justify-between pb-4">

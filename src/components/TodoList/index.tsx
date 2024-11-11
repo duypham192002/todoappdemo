@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import TodoListContent from "./TodoListContent";
 import TodoListInput from "./TodoListInput";
 
-enum Status {
-  All = "all",
-  Complete = "complete",
-  Incomplete = "incomplete",
-}
+export type Status = "all" | "complete" | "incomplete";
 
 export type TodoData = {
   checked: boolean;
@@ -18,16 +14,16 @@ export type TodoData = {
 
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
-  const [filter, setFilter] = useState<TodoData["status"]>(Status.All);
+  const [filter, setFilter] = useState<TodoData["status"]>("all");
   const [filteredTodoData, setFilteredTodoData] = useState<TodoData[]>([]);
 
   useEffect(() => {
     const filtered = todoData.filter((item) => {
       switch (filter) {
-        case Status.Complete:
-          return item.status === Status.Complete;
-        case Status.Incomplete:
-          return item.status === Status.Incomplete;
+        case "complete":
+          return item.status === "complete";
+        case "incomplete":
+          return item.status === "incomplete";
         default:
           return true;
       }
@@ -47,7 +43,9 @@ function TodoList() {
         return {
           ...item,
           checked: isNowChecked,
-          status: isNowChecked ? Status.Complete : Status.Incomplete,
+          status: isNowChecked
+            ? ("complete" as Status)
+            : ("incomplete" as Status),
         };
       }
       return item;
@@ -87,7 +85,7 @@ function TodoList() {
         checked: false,
         content,
         editingValue: "",
-        status: Status.Incomplete, // Use Status enum here
+        status: "incomplete",
       };
       setTodoData((prev) => [...prev, newTask]);
     }
@@ -103,6 +101,7 @@ function TodoList() {
       <TodoListContent
         todoCount={filteredTodoData.length}
         todoData={filteredTodoData}
+        filter={filter}
         handleOnDelete={handleOnDelete}
         handleOnToggle={handleOnToggle}
         deleteAllTasks={OnDeleteAllTasks}
