@@ -16,6 +16,10 @@ function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
   const [filter, setFilter] = useState<TodoData["status"]>("all");
   const filteredTodoData = useMemo(() => {
+    if (filter == "all") {
+      return todoData;
+    }
+
     return todoData.filter((item) => {
       switch (filter) {
         case "complete":
