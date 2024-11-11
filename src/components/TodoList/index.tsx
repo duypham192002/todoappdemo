@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import TodoListContent from "./TodoListContent";
 import TodoListInput from "./TodoListInput";
 
@@ -13,7 +13,10 @@ export type TodoData = {
 };
 
 function TodoList() {
-  const [todoData, setTodoData] = useState<TodoData[]>([]);
+  const [todoData, setTodoData] = useState<TodoData[]>(() => {
+    const savedTodo = localStorage.getItem("todos");
+    return savedTodo ? JSON.parse(savedTodo) : [];
+  });
   const [filter, setFilter] = useState<TodoData["status"]>("all");
   const filteredTodoData = useMemo(() => {
     if (filter == "all") {
@@ -21,6 +24,11 @@ function TodoList() {
     }
     return todoData.filter((item) => item.status === filter);
   }, [filter, todoData]);
+
+  useEffect(() => {
+    // save data when it changed
+    localStorage.setItem("todos", JSON.stringify(todoData));
+  });
 
   const handleOnDelete = (index: number) => {
     const targetItem = filteredTodoData[index];
