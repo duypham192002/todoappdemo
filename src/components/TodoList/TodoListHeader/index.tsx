@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { Status, TodoData } from "..";
 
-// Define the filteredData array outside of the component
 const filteredData: { label: string; value: TodoData["status"] }[] = [
   { label: "All", value: "all" },
   { label: "Complete", value: "complete" },
@@ -17,14 +15,12 @@ type TodoHeaderProps = {
 
 function TodoHeader({
   todoCount,
+  filter,
   onDeleteAllTasks,
   onFilterChange,
 }: TodoHeaderProps) {
-  const [filter, setFilter] = useState<TodoData["status"]>("all");
-
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newFilter = e.target.value as TodoData["status"];
-    setFilter(newFilter);
     onFilterChange(newFilter);
   };
 
