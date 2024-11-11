@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import TodoListContent from "./TodoListContent";
 import TodoListInput from "./TodoListInput";
 
@@ -15,10 +15,8 @@ export type TodoData = {
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>([]);
   const [filter, setFilter] = useState<TodoData["status"]>("all");
-  const [filteredTodoData, setFilteredTodoData] = useState<TodoData[]>([]);
-
-  useEffect(() => {
-    const filtered = todoData.filter((item) => {
+  const filteredTodoData = useMemo(() => {
+    return todoData.filter((item) => {
       switch (filter) {
         case "complete":
           return item.status === "complete";
@@ -28,7 +26,6 @@ function TodoList() {
           return true;
       }
     });
-    setFilteredTodoData(filtered);
   }, [filter, todoData]);
 
   const handleOnDelete = (index: number) => {
