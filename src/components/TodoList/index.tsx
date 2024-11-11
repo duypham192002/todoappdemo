@@ -19,17 +19,7 @@ function TodoList() {
     if (filter == "all") {
       return todoData;
     }
-
-    return todoData.filter((item) => {
-      switch (filter) {
-        case "complete":
-          return item.status === "complete";
-        case "incomplete":
-          return item.status === "incomplete";
-        default:
-          return true;
-      }
-    });
+    return todoData.filter((item) => item.status === filter);
   }, [filter, todoData]);
 
   const handleOnDelete = (index: number) => {
