@@ -28,8 +28,7 @@ function TodoList() {
   }, [filter, todoData]);
 
   useEffect(() => {
-    // save data when it changed
-    console.log(todoData);
+    // save todoData when it changed
     localStorage.setItem("todos", JSON.stringify(todoData));
   }, [todoData]);
 
