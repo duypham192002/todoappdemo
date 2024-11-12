@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Status, TodoData } from "..";
 import TodoHeader from "../TodoListHeader";
 import TodoItem from "./TodoListItem";
+import Popup from "../Popup/PopUp";
 
 function TodoListContent({
   todoCount,
@@ -23,6 +25,14 @@ function TodoListContent({
   handleSave: (index: number, newValue: string) => void;
   handleOnFilter: (newFilter: TodoData["status"]) => void;
 }) {
+  // Trạng thái để mở và đóng popup
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  // Hàm để mở hoặc đóng popup
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
+
   const handleDelete = (index: number) => {
     handleOnDelete(index);
   };
@@ -34,6 +44,7 @@ function TodoListContent({
         filter={filter}
         onDeleteAllTasks={deleteAllTasks}
         onFilterChange={handleOnFilter}
+        onOpenPopup={togglePopup}
       />
 
       <div>
@@ -49,6 +60,15 @@ function TodoListContent({
           />
         ))}
       </div>
+
+      {/* Hiển thị Popup khi trạng thái isPopupOpen là true */}
+      {isPopupOpen && (
+        <Popup
+          onClose={togglePopup}
+          data={todoData}
+          onDeleteChecked={handleDelete} // Updated to onDeleteChecked for consistency
+        />
+      )}
     </div>
   );
 }

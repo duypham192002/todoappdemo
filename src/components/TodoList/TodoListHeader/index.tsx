@@ -11,6 +11,7 @@ type TodoHeaderProps = {
   filter: Status;
   onDeleteAllTasks: () => void;
   onFilterChange: (filter: TodoData["status"]) => void;
+  onOpenPopup: () => void; // Hàm mở Popup
 };
 
 function TodoHeader({
@@ -18,6 +19,7 @@ function TodoHeader({
   filter,
   onDeleteAllTasks,
   onFilterChange,
+  onOpenPopup, // Nhận hàm mở Popup
 }: TodoHeaderProps) {
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newFilter = e.target.value as TodoData["status"];
@@ -50,7 +52,10 @@ function TodoHeader({
         </select>
       </form>
 
-      <button onClick={onDeleteAllTasks}>Clear all tasks</button>
+      <div className="flex gap-3">
+        <button onClick={onDeleteAllTasks}>Clear all tasks</button>
+        <button onClick={onOpenPopup}>Open Popup</button> {/* Nút mở Popup */}
+      </div>
     </div>
   );
 }

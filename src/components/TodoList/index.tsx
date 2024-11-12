@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import TodoListContent from "./TodoListContent";
 import TodoListInput from "./TodoListInput";
+import Popup from "./Popup/PopUp";
 
 export type Status = "all" | "complete" | "incomplete";
 
@@ -18,6 +19,8 @@ function TodoList() {
     return savedTodo ? JSON.parse(savedTodo) : [];
   });
   const [filter, setFilter] = useState<TodoData["status"]>("all");
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // Trạng thái để mở Popup
+
   const filteredTodoData = useMemo(() => {
     if (filter == "all") {
       return todoData;
@@ -26,9 +29,9 @@ function TodoList() {
   }, [filter, todoData]);
 
   useEffect(() => {
-    // save data when it changed
+    // Lưu dữ liệu vào localStorage khi có thay đổi
     localStorage.setItem("todos", JSON.stringify(todoData));
-  });
+  }, [todoData]);
 
   const handleOnDelete = (index: number) => {
     const targetItem = filteredTodoData[index];
@@ -94,6 +97,10 @@ function TodoList() {
     setFilter(newFilter);
   };
 
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
+
   return (
     <>
       <TodoListInput handleOnAdd={handleOnAdd} />
@@ -108,6 +115,15 @@ function TodoList() {
         handleSave={handleSave}
         handleOnFilter={handleOnFilter}
       />
+
+      {/* Hiển thị Popup khi cần thiết */}
+      {isPopupOpen && (
+        <Popup
+          onClose={togglePopup}
+          data={todoData}
+          onDeleteChecked={handleOnDelete}
+        />
+      )}
     </>
   );
 }
