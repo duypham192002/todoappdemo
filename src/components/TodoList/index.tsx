@@ -15,6 +15,8 @@ export type TodoData = {
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>(() => {
     const savedTodo = localStorage.getItem("todos");
+    // console.log(savedTodo);
+
     return savedTodo ? JSON.parse(savedTodo) : [];
   });
   const [filter, setFilter] = useState<TodoData["status"]>("all");
@@ -26,9 +28,9 @@ function TodoList() {
   }, [filter, todoData]);
 
   useEffect(() => {
-    // save data when it changed
+    // save todoData when it changed
     localStorage.setItem("todos", JSON.stringify(todoData));
-  });
+  }, [todoData]);
 
   const handleOnDelete = (index: number) => {
     const targetItem = filteredTodoData[index];
