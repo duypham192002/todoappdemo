@@ -16,6 +16,8 @@ export type TodoData = {
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>(() => {
     const savedTodo = localStorage.getItem("todos");
+    // console.log(savedTodo);
+
     return savedTodo ? JSON.parse(savedTodo) : [];
   });
   const [filter, setFilter] = useState<TodoData["status"]>("all");
@@ -29,7 +31,6 @@ function TodoList() {
   }, [filter, todoData]);
 
   useEffect(() => {
-    // Lưu dữ liệu vào localStorage khi có thay đổi
     localStorage.setItem("todos", JSON.stringify(todoData));
   }, [todoData]);
 
