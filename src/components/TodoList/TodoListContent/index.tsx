@@ -1,6 +1,7 @@
 import { Status, TodoData } from "..";
 import TodoHeader from "../TodoListHeader";
 import TodoItem from "./TodoListItem";
+import Popup from "../Popup/PopUp";
 
 function TodoListContent({
   todoCount,
@@ -12,6 +13,8 @@ function TodoListContent({
   handleToggleEdit,
   handleSave,
   handleOnFilter,
+  handleDeleteCheckedItems,
+  onOpenPopup,
 }: {
   todoCount: number;
   todoData: TodoData[];
@@ -22,6 +25,8 @@ function TodoListContent({
   handleToggleEdit: (index: number) => void;
   handleSave: (index: number, newValue: string) => void;
   handleOnFilter: (newFilter: TodoData["status"]) => void;
+  handleDeleteCheckedItems: () => void;
+  onOpenPopup: () => void; // Nhận prop từ cha để mở Popup
 }) {
   const handleDelete = (index: number) => {
     handleOnDelete(index);
@@ -34,6 +39,7 @@ function TodoListContent({
         filter={filter}
         onDeleteAllTasks={deleteAllTasks}
         onFilterChange={handleOnFilter}
+        onOpenPopup={onOpenPopup} // Gọi hàm mở Popup
       />
 
       <div>
@@ -49,6 +55,12 @@ function TodoListContent({
           />
         ))}
       </div>
+
+      <Popup
+        data={todoData}
+        onDeleteCheckedItems={handleDeleteCheckedItems}
+        onToggle={handleOnToggle}
+      />
     </div>
   );
 }
