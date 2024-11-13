@@ -4,15 +4,10 @@ type PopupProps = {
   onClose: () => void;
   data: TodoData[];
   onDeleteChecked: (index: number) => void;
+  onToggle: (index: number) => void;
 };
 
-const Popup = ({ onClose, data, onDeleteChecked }: PopupProps) => {
-  const handleCheckedChange = (index: number) => {
-    const updatedData = [...data];
-    updatedData[index].checked = !updatedData[index].checked;
-    // Cập nhật lại state (có thể là thông qua `useState` trong TodoList, tùy vào thiết kế)
-  };
-
+const Popup = ({ onClose, data, onDeleteChecked, onToggle }: PopupProps) => {
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
       <div className="relative bg-white p-5 rounded-lg shadow-lg max-w-sm w-full">
@@ -39,15 +34,14 @@ const Popup = ({ onClose, data, onDeleteChecked }: PopupProps) => {
         <div>
           <h3 className="text-lg font-bold mb-3">Popup TodoData</h3>
           {data.map((item, index) => (
-            <div key={index} className="flex items-center gap-4">
+            <div key={index} className="flex items-center gap-4 pb-4">
               <input
                 type="checkbox"
                 checked={item.checked}
-                onChange={() => handleCheckedChange(index)}
-                className={`size-4 ${item.checked ? "opacity-50" : ""}`}
+                onChange={() => onToggle(index)}
+                className="checked:bg-blue-500 size-4"
               />
               <input
-                type="text"
                 value={item.content}
                 readOnly
                 className="px-2 py-1 border border-gray-300 rounded"
@@ -62,7 +56,7 @@ const Popup = ({ onClose, data, onDeleteChecked }: PopupProps) => {
               data.forEach(
                 (item, index) => item.checked && onDeleteChecked(index)
               )
-            } // Xóa các mục đã được chọn
+            }
             className="bg-red-500 text-white px-4 py-2 rounded-md"
           >
             Delete Checked

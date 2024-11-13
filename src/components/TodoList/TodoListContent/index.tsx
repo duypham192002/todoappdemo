@@ -61,12 +61,12 @@ function TodoListContent({
         ))}
       </div>
 
-      {/* Hiển thị Popup khi trạng thái isPopupOpen là true */}
       {isPopupOpen && (
         <Popup
           onClose={togglePopup}
           data={todoData}
-          onDeleteChecked={handleDelete} // Updated to onDeleteChecked for consistency
+          onDeleteChecked={handleDelete}
+          onToggle={handleOnToggle}
         />
       )}
     </div>

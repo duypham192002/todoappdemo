@@ -116,12 +116,12 @@ function TodoList() {
         handleOnFilter={handleOnFilter}
       />
 
-      {/* Hiển thị Popup khi cần thiết */}
       {isPopupOpen && (
         <Popup
           onClose={togglePopup}
           data={todoData}
           onDeleteChecked={handleOnDelete}
+          onToggle={handleOnToggle}
         />
       )}
     </>
