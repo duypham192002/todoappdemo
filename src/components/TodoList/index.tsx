@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import TodoListContent from "./TodoListContent";
 import TodoListInput from "./TodoListInput";
 import Popup from "./Popup/PopUp";
@@ -16,12 +16,15 @@ export type TodoData = {
 function TodoList() {
   const [todoData, setTodoData] = useState<TodoData[]>(() => {
     const savedTodo = localStorage.getItem("todos");
-    // console.log(savedTodo);
-
     return savedTodo ? JSON.parse(savedTodo) : [];
   });
   const [filter, setFilter] = useState<TodoData["status"]>("all");
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // Trạng thái để mở Popup
+  // const [isPopupOpen, setIsPopupOpen] = useState(false); // Trạng thái để mở Popup
+
+  const popupRef = useRef<{
+    openPopup: () => void;
+    closePopup: () => void;
+  } | null>(null);
 
   const filteredTodoData = useMemo(() => {
     if (filter == "all") {
@@ -82,6 +85,10 @@ function TodoList() {
     setTodoData([]);
   };
 
+  const handleDeleteCheckedItems = () => {
+    setTodoData((prevData) => prevData.filter((item) => !item.checked));
+  };
+
   const handleOnAdd = (content: string) => {
     if (content.trim()) {
       const newTask: TodoData = {
@@ -98,10 +105,6 @@ function TodoList() {
     setFilter(newFilter);
   };
 
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
-  };
-
   return (
     <>
       <TodoListInput handleOnAdd={handleOnAdd} />
@@ -115,16 +118,16 @@ function TodoList() {
         handleToggleEdit={handleToggleEdit}
         handleSave={handleSave}
         handleOnFilter={handleOnFilter}
+        handleDeleteCheckedItems={handleDeleteCheckedItems}
+        onOpenPopup={() => popupRef.current?.openPopup()}
       />
 
-      {isPopupOpen && (
-        <Popup
-          onClose={togglePopup}
-          data={todoData}
-          onDeleteChecked={handleOnDelete}
-          onToggle={handleOnToggle}
-        />
-      )}
+      <Popup
+        ref={popupRef}
+        data={todoData}
+        onDeleteCheckedItems={handleDeleteCheckedItems}
+        onToggle={handleOnToggle}
+      />
     </>
   );
 }
