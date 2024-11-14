@@ -1,4 +1,4 @@
-import { Status, TodoData } from "..";
+import { TodoData, Status } from "../Context/TodoContext";
 import TodoHeader from "../TodoListHeader";
 import TodoItem from "./TodoListItem";
 import Popup from "../Popup/PopUp";
