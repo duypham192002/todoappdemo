@@ -15,6 +15,7 @@ function TodoListContent({
   handleOnFilter,
   handleDeleteCheckedItems,
   onOpenPopup,
+  handleClosePopup,
 }: {
   todoCount: number;
   todoData: TodoData[];
@@ -27,6 +28,7 @@ function TodoListContent({
   handleOnFilter: (newFilter: TodoData["status"]) => void;
   handleDeleteCheckedItems: () => void;
   onOpenPopup: () => void; // Nhận prop từ cha để mở Popup
+  handleClosePopup: (updatedData: TodoData[]) => void;
 }) {
   const handleDelete = (index: number) => {
     handleOnDelete(index);
@@ -59,7 +61,8 @@ function TodoListContent({
       <Popup
         data={todoData}
         onDeleteCheckedItems={handleDeleteCheckedItems}
-        onToggle={handleOnToggle}
+        // onToggle={handleOnToggle}
+        onClose={handleClosePopup}
       />
     </div>
   );
