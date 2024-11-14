@@ -1,4 +1,4 @@
-import { Status, TodoData } from "..";
+import { TodoData, Status } from "../Context/TodoContext";
 
 const filteredData: { label: string; value: TodoData["status"] }[] = [
   { label: "All", value: "all" },
