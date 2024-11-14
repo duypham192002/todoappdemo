@@ -85,6 +85,10 @@ function TodoList() {
     setTodoData([]);
   };
 
+  const handleClosePopup = (updatedData: TodoData[]) => {
+    setTodoData(updatedData); // Cập nhật todoData với dữ liệu từ Popup khi đóng Popup
+  };
+
   const handleDeleteCheckedItems = () => {
     setTodoData((prevData) => prevData.filter((item) => !item.checked));
   };
@@ -120,13 +124,14 @@ function TodoList() {
         handleOnFilter={handleOnFilter}
         handleDeleteCheckedItems={handleDeleteCheckedItems}
         onOpenPopup={() => popupRef.current?.openPopup()}
+        handleClosePopup={handleClosePopup}
       />
 
       <Popup
         ref={popupRef}
         data={todoData}
-        onDeleteCheckedItems={handleDeleteCheckedItems}
-        onToggle={handleOnToggle}
+        onDeleteCheckedItems={handleDeleteCheckedItems} // Truyền hàm đã cập nhật
+        onClose={handleClosePopup} // Cập nhật todoData khi đóng Popup
       />
     </>
   );
