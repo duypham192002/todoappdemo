@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-import TodoListContent from "./TodoListContent";
-import TodoListInput from "./TodoListInput";
-import Popup from "./Popup/PopUp";
+// import TodoListContent from "./TodoListContent";
+import TodoListContent from "../TodoListContent";
+import TodoListInput from "../TodoListInput";
+import Popup from "../Popup";
 
 export type Status = "all" | "complete" | "incomplete";
 

@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
-import { TodoData } from "..";
+import { TodoData } from "../TodoList";
 
 type PopupProps = {
   data: TodoData[];

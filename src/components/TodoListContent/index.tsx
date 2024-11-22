@@ -1,7 +1,8 @@
-import { Status, TodoData } from "..";
+// import { Status, TodoData } from "..";
+import { TodoData, Status } from "../TodoList";
 import TodoHeader from "../TodoListHeader";
 import TodoItem from "./TodoListItem";
-import Popup from "../Popup/PopUp";
+import Popup from "../Popup";
 
 function TodoListContent({
   todoCount,
