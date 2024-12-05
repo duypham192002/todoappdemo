@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TodoData } from "../..";
+import { TodoData } from "../../../pages/TodoList";
 
 interface TodoItemProps {
   data: TodoData;

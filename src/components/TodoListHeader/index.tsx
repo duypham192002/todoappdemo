@@ -1,4 +1,4 @@
-import { Status, TodoData } from "..";
+import { Status, TodoData } from "../../pages/TodoList";
 
 const filteredData: { label: string; value: TodoData["status"] }[] = [
   { label: "All", value: "all" },
