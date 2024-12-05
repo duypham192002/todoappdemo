@@ -1,5 +1,5 @@
 // import { Status, TodoData } from "..";
-import { TodoData, Status } from "../TodoList";
+import { TodoData, Status } from "../../pages/TodoList";
 import TodoHeader from "../TodoListHeader";
 import TodoItem from "./TodoListItem";
 import Popup from "../Popup";
@@ -36,36 +36,38 @@ function TodoListContent({
   };
 
   return (
-    <div className="max-w-full bg-white shadow-lg p-4 rounded-xl">
-      <TodoHeader
-        todoCount={todoCount}
-        filter={filter}
-        onDeleteAllTasks={deleteAllTasks}
-        onFilterChange={handleOnFilter}
-        onOpenPopup={onOpenPopup} // Gọi hàm mở Popup
-      />
+    <>
+      <div className="max-w-full bg-white shadow-lg p-4 rounded-xl">
+        <TodoHeader
+          todoCount={todoCount}
+          filter={filter}
+          onDeleteAllTasks={deleteAllTasks}
+          onFilterChange={handleOnFilter}
+          onOpenPopup={onOpenPopup} // Gọi hàm mở Popup
+        />
 
-      <div>
-        {todoData.map((data, index) => (
-          <TodoItem
-            key={index}
-            data={data}
-            index={index}
-            onSaveEdit={handleSave}
-            onDelete={handleDelete}
-            onToggle={handleOnToggle}
-            onToggleEdit={handleToggleEdit}
-          />
-        ))}
+        <div>
+          {todoData.map((data, index) => (
+            <TodoItem
+              key={index}
+              data={data}
+              index={index}
+              onSaveEdit={handleSave}
+              onDelete={handleDelete}
+              onToggle={handleOnToggle}
+              onToggleEdit={handleToggleEdit}
+            />
+          ))}
+        </div>
+
+        <Popup
+          data={todoData}
+          onDeleteCheckedItems={handleDeleteCheckedItems}
+          // onToggle={handleOnToggle}
+          onClose={handleClosePopup}
+        />
       </div>
-
-      <Popup
-        data={todoData}
-        onDeleteCheckedItems={handleDeleteCheckedItems}
-        // onToggle={handleOnToggle}
-        onClose={handleClosePopup}
-      />
-    </div>
+    </>
   );
 }
 

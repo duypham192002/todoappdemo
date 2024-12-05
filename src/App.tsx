@@ -1,36 +1,36 @@
-import { useState } from "react";
-import TodoList from "./components/TodoList";
-import LoginForm from "./components/LoginForm";
-import RegisterForm from "./components/RegisterForm";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import TodoList from "./pages/TodoList";
+import LoginForm from "./pages/LoginForm";
+import RegisterForm from "./pages/RegisterForm";
+import Header from "./components/Header";
+import { UserProvider } from "./contexts/UserContext";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<"home" | "login" | "signup">(
-    "home"
-  );
-
   return (
-    <div>
-      {currentPage === "home" && (
-        <div className="hero w-full h-72 absolute top-0 left-0 bg-gradient-to-r from-sky-500 to-fuchsia-500 bg-no-repeat object-cover bg-cover">
-          <div className="absolute p-5 top-0 right-0">
-            <button onClick={() => setCurrentPage("login")} className="pr-3">
-              Login
-            </button>
-            <button onClick={() => setCurrentPage("signup")} className="pl-2">
-              Register
-            </button>
-          </div>
-          <div className="container mx-auto max-w-2xl flex flex-col gap-5 mt-10">
-            <h1 className="text-5xl text-center py-10">MY TASK</h1>
-            <TodoList />
+    <UserProvider>
+      <Router>
+        <div>
+          {/* Navigation Bar */}
+          <Header />
+          <div className="bg-gradient-to-r from-sky-500 to-fuchsia-500 bg-no-repeat object-cover bg-cover">
+            {/* Routes */}
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <div className="container mx-auto max-w-2xl flex flex-col">
+                    <h1 className="text-5xl text-center py-10">MY TASK</h1>
+                    <TodoList />
+                  </div>
+                }
+              />
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/register" element={<RegisterForm />} />
+            </Routes>
           </div>
         </div>
-      )}
-
-      {currentPage === "login" && <LoginForm />}
-
-      {currentPage === "signup" && <RegisterForm />}
-    </div>
+      </Router>
+    </UserProvider>
   );
 }
 
